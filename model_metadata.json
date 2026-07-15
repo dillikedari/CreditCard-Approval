@@ -1,0 +1,52 @@
+{
+    "best_model": "Logistic Regression",
+    "numeric_features": [
+        "Age",
+        "Number_of_Children",
+        "Annual_Income",
+        "Employment_Duration_Years",
+        "Credit_Inquiries_Last_6M",
+        "Family_Size",
+        "Inquiries_to_Income_Ratio",
+        "Payment_History_Grade"
+    ],
+    "categorical_features": [
+        "Gender",
+        "Own_Car",
+        "Own_Property",
+        "Income_Type",
+        "Education_Level",
+        "Marital_Status",
+        "Housing_Type",
+        "Has_Work_Phone",
+        "Has_Phone",
+        "Has_Email",
+        "Credit_History",
+        "Income_Group",
+        "Employment_Duration_Category"
+    ],
+    "columns": [
+        "Gender",
+        "Age",
+        "Own_Car",
+        "Own_Property",
+        "Number_of_Children",
+        "Annual_Income",
+        "Income_Type",
+        "Education_Level",
+        "Marital_Status",
+        "Housing_Type",
+        "Employment_Duration_Years",
+        "Has_Work_Phone",
+        "Has_Phone",
+        "Has_Email",
+        "Credit_History",
+        "Credit_Inquiries_Last_6M",
+        "Payment_History_Status",
+        "Family_Size",
+        "Income_Group",
+        "Employment_Duration_Category",
+        "Inquiries_to_Income_Ratio",
+        "Payment_History_Grade"
+    ]
+}

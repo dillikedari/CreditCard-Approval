@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Credit Card Approval Predictor</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="background-decor">
+        <div class="circle circle-1"></div>
+        <div class="circle circle-2"></div>
+    </div>
+    
+    <div class="container">
+        <header>
+            <h1>Credit Card Approval Prediction</h1>
+            <p class="subtitle">Secure Applicant Verification & Risk Scoring System</p>
+        </header>
+
+        {% if prediction %}
+        <div class="result-card {% if prediction == 'Approved' %}approved{% else %}rejected{% endif %}">
+            <div class="result-icon">
+                {% if prediction == 'Approved' %}✓{% else %}✗{% endif %}
+            </div>
+            <div class="result-details">
+                <h3>Application Decision: {{ prediction }}</h3>
+                <p>Confidence: <strong>{{ confidence }}</strong></p>
+                <span class="badge">System Automated Result</span>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if error %}
+        <div class="error-card">
+            <span class="error-icon">⚠</span>
+            <p>{{ error }}</p>
+        </div>
+        {% endif %}
+
+        <form action="/predict" method="POST" class="glass-form">
+            <h2>Applicant Profile Form</h2>
+            
+            <div class="form-grid">
+                <!-- Section 1: Demographics -->
+                <div class="form-section">
+                    <h3>Demographics</h3>
+                    
+                    <div class="form-group">
+                        <label for="Gender">Gender</label>
+                        <select name="Gender" id="Gender" required>
+                            <option value="Male" {% if form_data and form_data.Gender == 'Male' %}selected{% endif %}>Male</option>
+                            <option value="Female" {% if form_data and form_data.Gender == 'Female' %}selected{% endif %}>Female</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Age">Age (Years)</label>
+                        <input type="number" name="Age" id="Age" min="18" max="100" value="{{ form_data.Age if form_data else 30 }}" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Marital_Status">Marital Status</label>
+                        <select name="Marital_Status" id="Marital_Status" required>
+                            <option value="Married" {% if form_data and form_data.Marital_Status == 'Married' %}selected{% endif %}>Married</option>
+                            <option value="Single" {% if form_data and form_data.Marital_Status == 'Single' %}selected{% endif %}>Single</option>
+                            <option value="Divorced" {% if form_data and form_data.Marital_Status == 'Divorced' %}selected{% endif %}>Divorced</option>
+                            <option value="Widowed" {% if form_data and form_data.Marital_Status == 'Widowed' %}selected{% endif %}>Widowed</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Education_Level">Education Level</label>
+                        <select name="Education_Level" id="Education_Level" required>
+                            <option value="Graduate" {% if form_data and form_data.Education_Level == 'Graduate' %}selected{% endif %}>Graduate</option>
+                            <option value="Post-Graduate" {% if form_data and form_data.Education_Level == 'Post-Graduate' %}selected{% endif %}>Post-Graduate</option>
+                            <option value="High School" {% if form_data and form_data.Education_Level == 'High School' %}selected{% endif %}>High School</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Family_Size">Family Size</label>
+                        <input type="number" name="Family_Size" id="Family_Size" min="1" max="10" value="{{ form_data.Family_Size if form_data else 2 }}" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Number_of_Children">Number of Children</label>
+                        <input type="number" name="Number_of_Children" id="Number_of_Children" min="0" max="8" value="{{ form_data.Number_of_Children if form_data else 0 }}" required>
+                    </div>
+                </div>
+
+                <!-- Section 2: Finances & Assets -->
+                <div class="form-section">
+                    <h3>Financial Profile</h3>
+
+                    <div class="form-group">
+                        <label for="Annual_Income">Annual Income ($)</label>
+                        <input type="number" name="Annual_Income" id="Annual_Income" min="1000" max="1000000" value="{{ form_data.Annual_Income if form_data else 65000 }}" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Income_Type">Income Source Type</label>
+                        <select name="Income_Type" id="Income_Type" required>
+                            <option value="Salaried" {% if form_data and form_data.Income_Type == 'Salaried' %}selected{% endif %}>Salaried / Employed</option>
+                            <option value="Self-Employed" {% if form_data and form_data.Income_Type == 'Self-Employed' %}selected{% endif %}>Self-Employed</option>
+                            <option value="Pensioner" {% if form_data and form_data.Income_Type == 'Pensioner' %}selected{% endif %}>Pensioner</option>
+                            <option value="Student" {% if form_data and form_data.Income_Type == 'Student' %}selected{% endif %}>Student</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Employment_Duration_Years">Employment Duration (Years)</label>
+                        <input type="number" name="Employment_Duration_Years" id="Employment_Duration_Years" min="0" max="50" step="0.1" value="{{ form_data.Employment_Duration_Years if form_data else 4.5 }}" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Housing_Type">Housing Type</label>
+                        <select name="Housing_Type" id="Housing_Type" required>
+                            <option value="Owned House" {% if form_data and form_data.Housing_Type == 'Owned House' %}selected{% endif %}>Owned House</option>
+                            <option value="Rented Apartment" {% if form_data and form_data.Housing_Type == 'Rented Apartment' %}selected{% endif %}>Rented Apartment</option>
+                            <option value="With Parents" {% if form_data and form_data.Housing_Type == 'With Parents' %}selected{% endif %}>With Parents</option>
+                            <option value="Municipal House" {% if form_data and form_data.Housing_Type == 'Municipal House' %}selected{% endif %}>Municipal House</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group-row">
+                        <div class="form-group check-box">
+                            <label for="Own_Car">Owns Car</label>
+                            <select name="Own_Car" id="Own_Car" required>
+                                <option value="Yes" {% if form_data and form_data.Own_Car == 'Yes' %}selected{% endif %}>Yes</option>
+                                <option value="No" {% if form_data and form_data.Own_Car == 'No' %}selected{% endif %}>No</option>
+                            </select>
+                        </div>
+                        <div class="form-group check-box">
+                            <label for="Own_Property">Owns Property</label>
+                            <select name="Own_Property" id="Own_Property" required>
+                                <option value="Yes" {% if form_data and form_data.Own_Property == 'Yes' %}selected{% endif %}>Yes</option>
+                                <option value="No" {% if form_data and form_data.Own_Property == 'No' %}selected{% endif %}>No</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 3: Credit Risk -->
+                <div class="form-section">
+                    <h3>Risk & Credit Metrics</h3>
+
+                    <div class="form-group">
+                        <label for="Credit_History">Credit History Rating</label>
+                        <select name="Credit_History" id="Credit_History" required>
+                            <option value="Good" {% if form_data and form_data.Credit_History == 'Good' %}selected{% endif %}>Good / Established Credit</option>
+                            <option value="Bad" {% if form_data and form_data.Credit_History == 'Bad' %}selected{% endif %}>Bad / No Credit History</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Credit_Inquiries_Last_6M">Credit Inquiries (Last 6 Months)</label>
+                        <input type="number" name="Credit_Inquiries_Last_6M" id="Credit_Inquiries_Last_6M" min="0" max="20" value="{{ form_data.Credit_Inquiries_Last_6M if form_data else 0 }}" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Payment_History_Status">Payment History Status</label>
+                        <select name="Payment_History_Status" id="Payment_History_Status" required>
+                            <option value="No Debt" {% if form_data and form_data.Payment_History_Status == 'No Debt' %}selected{% endif %}>No Debt / Paid in Full</option>
+                            <option value="Late Payments" {% if form_data and form_data.Payment_History_Status == 'Late Payments' %}selected{% endif %}>Late Payments (Under 30-90 Days)</option>
+                            <option value="Serious Default" {% if form_data and form_data.Payment_History_Status == 'Serious Default' %}selected{% endif %}>Serious Default / Write-Off</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Contact Info Provided</label>
+                        <div class="form-group-row">
+                            <div class="form-group inline-select">
+                                <label for="Has_Work_Phone">Work Phone</label>
+                                <select name="Has_Work_Phone" id="Has_Work_Phone">
+                                    <option value="Yes">Yes</option>
+                                    <option value="No" selected>No</option>
+                                </select>
+                            </div>
+                            <div class="form-group inline-select">
+                                <label for="Has_Phone">Mobile Phone</label>
+                                <select name="Has_Phone" id="Has_Phone">
+                                    <option value="Yes" selected>Yes</option>
+                                    <option value="No">No</option>
+                                </select>
+                            </div>
+                            <div class="form-group inline-select">
+                                <label for="Has_Email">Email</label>
+                                <select name="Has_Email" id="Has_Email">
+                                    <option value="Yes">Yes</option>
+                                    <option value="No" selected>No</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <button type="submit" class="submit-btn">Run Predictive Analysis</button>
+        </form>
+    </div>
+</body>
+</html>
