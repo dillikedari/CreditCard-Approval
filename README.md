@@ -82,6 +82,10 @@ Our models yielded the following metrics:
 
 The models show high stability, driven strongly by the credit history and payment record.
 
+Dataset Notice :
+
+The original dataset is not included in this repository due to size limitations.
+The trained model (`model.pkl`) is included, and the Flask application can be used directly for predictions.
 ---
 
 ## Author
